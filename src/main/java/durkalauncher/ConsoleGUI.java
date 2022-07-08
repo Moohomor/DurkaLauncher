@@ -74,6 +74,7 @@ public class ConsoleGUI extends JFrame {
                     } catch (IOException e) {
                         e.printStackTrace();
                     }*/
+            textArea.setText("Full command: "+Main.fullCommand);
             BufferedReader stdInput = new BufferedReader(new InputStreamReader(Main.process.getInputStream()));
             BufferedReader stdError = new BufferedReader(new InputStreamReader(Main.process.getErrorStream()));
 

@@ -19,6 +19,7 @@ public class Main {
     static ConsoleGUI consoleGUI;
     static JButton button;
     static String lastOutput;
+    static String fullCommand;
 
 
 
@@ -64,7 +65,7 @@ public class Main {
         //main code
         JFrame frame = new JFrame("Durka Launcher");
         frame.setResizable(false);
-        frame.setIconImage(ImageIO.read(Objects.requireNonNull(Main.class.getResourceAsStream("icon.png"))));
+        frame.setIconImage(ImageIO.read(Objects.requireNonNull(Main.class.getClassLoader().getResource("icon.png"))));
         JPanel panel = new JPanel();
         JTextField nicknameField = new JTextField(16);
         JTextField memoryField = new JTextField( String.valueOf(((com.sun.management.OperatingSystemMXBean) ManagementFactory
@@ -105,12 +106,13 @@ public class Main {
                 if (process == null || !process.isAlive()) {
                     String path = System.getProperty("user.home").replace("\\","\\\\")+"\\\\AppData\\\\Roaming\\\\.durka";
                     if (!new File(path).exists()) throw new RuntimeException("I tried to run Durka but I didn't find it");
-                    String command = COMMAND_TEMPLATE
+                    if (fullCommand==null)
+                    fullCommand = COMMAND_TEMPLATE
                             .replaceAll("%gamedir", path)
                             .replaceAll("%memory", memoryField.getText())
                             .replaceAll("%username", nicknameField.getText());
-                    System.out.println("Full command: "+command);
-                    process = Runtime.getRuntime().exec(command);
+                    System.out.println("Full command: "+fullCommand);
+                    process = Runtime.getRuntime().exec(fullCommand);
                     consoleGUI = new ConsoleGUI();
                     consoleGUI.setVisible(true);
                     button.setText("Stop");
