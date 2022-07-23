@@ -6,11 +6,9 @@ import java.awt.*;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.*;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.lang.management.ManagementFactory;
 import java.util.Objects;
-import java.util.Properties;
 
 public class Main {
 
@@ -20,7 +18,7 @@ public class Main {
     static JButton button;
     static String lastOutput;
     static String fullCommand;
-
+    static CheatChecker cheatChecker;
 
 
     public static void main(String[] args) throws IOException {
@@ -104,7 +102,9 @@ public class Main {
         button.addActionListener(e -> {
             try {
                 if (process == null || !process.isAlive()) {
-                    String path = System.getProperty("user.home").replace("\\","\\\\")+"\\\\AppData\\\\Roaming\\\\.durka";
+                    String dir = ".durka";
+                    // set to .minecraft if 1.19 exists
+                    String path = System.getProperty("user.home").replace("\\","\\\\")+"\\\\AppData\\\\Roaming\\\\"+dir;
                     if (!new File(path).exists()) throw new RuntimeException("I tried to run Durka but I didn't find it");
                     if (fullCommand==null)
                     fullCommand = COMMAND_TEMPLATE
@@ -114,6 +114,8 @@ public class Main {
                     System.out.println("Full command: "+fullCommand);
                     process = Runtime.getRuntime().exec(fullCommand);
                     consoleGUI = new ConsoleGUI();
+                    cheatChecker = new CheatChecker(path);
+                    cheatChecker.start();
                     consoleGUI.setVisible(true);
                     button.setText("Stop");
                     showConsoleLabel.setForeground(Color.BLACK);

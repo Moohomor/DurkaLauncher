@@ -63,6 +63,10 @@ public class ConsoleGUI extends JFrame {
         consoleThread.start();
     }
 
+    public void printToConsole(String message) {
+        textArea.setText(textArea.getText()+"\n"+message);
+    }
+
     private class ConsoleThread extends Thread {
 
         @Override
